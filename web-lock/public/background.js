@@ -5,14 +5,15 @@ let state = {
   timerId: null,
 };
 
+// Load state from storage
 chrome.storage.sync.get(
   ["isBlockingEnabled", "blockedWebsites"],
   function (data) {
-    if (data.isBlockingEnabled) {
-      isBlockingEnabled = data.isBlockingEnabled;
+    if (data.isBlockingEnabled !== undefined) {
+      state.isBlockingEnabled = data.isBlockingEnabled;
     }
     if (data.blockedWebsites) {
-      blockedWebsites = data.blockedWebsites;
+      state.blockedWebsites = data.blockedWebsites;
     }
   }
 );
