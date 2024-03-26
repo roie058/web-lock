@@ -25,6 +25,7 @@ function updateState(newState) {
 
 // Function to start the timer
 function startTimer(countdown = 1) {
+  chrome.storage.sync.set({ blockingTimestamp: Date.now() });
   updateState({
     timerId: setTimeout(() => {
       updateState({ isBlockingEnabled: false, timerId: null });

@@ -16,7 +16,7 @@ const Popup: React.FC = () => {
             });
        },[])
      
-
+       
        useEffect(()=>{
         if(isBlockingEnabled&&timestamp){
         const currentTime = Date.now();
