@@ -24,7 +24,6 @@ const Popup: React.FC = () => {
                                     if (prevTimeLeft <= 1000) {
                                         clearInterval(timerId);
                                         setIsBlockingEnabled(false);
-                                        chrome.storage.sync.set({ 'isBlockingEnabled': false });
                                         return 0;
                                     }
                                     return prevTimeLeft - 1000;
@@ -33,7 +32,7 @@ const Popup: React.FC = () => {
                         } else {
                             // If the time limit has already passed, turn off blocking
                             setIsBlockingEnabled(false);
-                            chrome.storage.sync.set({ 'isBlockingEnabled': false });
+                          
                         }
                     }
                 }
@@ -71,12 +70,13 @@ const Popup: React.FC = () => {
             chrome.runtime.sendMessage({ action: 'startTimer',countdown:1 }, function(response) {
                 console.log(response);
             });
+            setTimeLeft(1 * 60 * 1000); // Reset the timer
             const timerId = setInterval(() => {
                 setTimeLeft(prevTimeLeft => {
+                    console.log(prevTimeLeft,"and");
                     if (prevTimeLeft <= 1000) {
                         clearInterval(timerId);
                         setIsBlockingEnabled(false);
-                        chrome.storage.sync.set({ 'isBlockingEnabled': false });
                         return 0;
                     }
                     return prevTimeLeft - 1000;
