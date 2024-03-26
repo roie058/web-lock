@@ -44,13 +44,12 @@ function stopTimer() {
 // Listen for tab updates
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   if (
-    isBlockingEnabled &&
-    blockedWebsites.some((website) => tab.url.includes(website))
+    state.isBlockingEnabled &&
+    state.blockedWebsites.some((website) => tab.url.includes(website))
   ) {
     chrome.tabs.remove(tabId, function () {
       console.log("Blocked website:", tab.url);
     });
-    // chrome.tabs.update(tabId, { url: "https://example.com/blocked.html" });
   }
 });
 
