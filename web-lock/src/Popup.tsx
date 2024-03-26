@@ -4,29 +4,42 @@ const Popup: React.FC = () => {
     const [website, setWebsite] = useState<string>('');
     const [isBlockingEnabled,setIsBlockingEnabled]=useState<boolean>(false) 
     const [timeLeft,setTimeLeft]=useState<number>(0) 
-    const [timestamp,setTimestamp]=useState<number>(0) 
 
        useEffect(()=>{
             // Load the toggle state from storage
             chrome.storage.sync.get(['isBlockingEnabled','blockingTimestamp'], function(data) {
                 if (data.isBlockingEnabled !== undefined) {
                     setIsBlockingEnabled(data.isBlockingEnabled);
-                    setTimestamp(data.blockingTimestamp)
+                    if (data.isBlockingEnabled) {
+                        // Calculate the remaining time before turning off blocking
+                        const blockingTimestamp = data.blockingTimestamp || 0;
+                        const currentTime = Date.now();
+                        const remainingTime = blockingTimestamp + (1 * 60 * 1000) - currentTime; // 2 minutes
+                        
+                        if (remainingTime > 0) {
+                            setTimeLeft(remainingTime);
+                            // Start the countdown timer
+                            const timerId = setInterval(() => {
+                                setTimeLeft(prevTimeLeft => {
+                                    if (prevTimeLeft <= 1000) {
+                                        clearInterval(timerId);
+                                        setIsBlockingEnabled(false);
+                                        chrome.storage.sync.set({ 'isBlockingEnabled': false });
+                                        return 0;
+                                    }
+                                    return prevTimeLeft - 1000;
+                                });
+                            }, 1000);
+                        } else {
+                            // If the time limit has already passed, turn off blocking
+                            setIsBlockingEnabled(false);
+                            chrome.storage.sync.set({ 'isBlockingEnabled': false });
+                        }
+                    }
                 }
             });
        },[])
      
-       
-       useEffect(()=>{
-        if(isBlockingEnabled&&timestamp){
-        const currentTime = Date.now();
-        const left = timestamp + (1 * 60 * 1000) - currentTime
-        if(left>0){
-            setTimeLeft(left)
-        }else{
-            setTimeLeft(0)
-        }}
-       },[timeLeft])
 
     const handleAddWebsite = () => {
         if (website.trim() !== '') {
@@ -58,20 +71,41 @@ const Popup: React.FC = () => {
             chrome.runtime.sendMessage({ action: 'startTimer',countdown:1 }, function(response) {
                 console.log(response);
             });
+            const timerId = setInterval(() => {
+                setTimeLeft(prevTimeLeft => {
+                    if (prevTimeLeft <= 1000) {
+                        clearInterval(timerId);
+                        setIsBlockingEnabled(false);
+                        chrome.storage.sync.set({ 'isBlockingEnabled': false });
+                        return 0;
+                    }
+                    return prevTimeLeft - 1000;
+                });
+            }, 1000);
+
         }else{
             chrome.runtime.sendMessage({ action: 'stopTimer'}, function(response) {
                 console.log(response);
             });
+            setTimeLeft(0); // Reset the timer
         }
-        
-
     }
+
+    // Format the remaining time as minutes and seconds
+    const minutes = Math.floor(timeLeft / 60000);
+    const seconds = Math.floor((timeLeft % 60000) / 1000);
+    const formattedTimeLeft = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
 
     return (
         <div>
             <label htmlFor="toggleBlocking">Toggle Blocking:</label>
     <input type="checkbox" disabled={isBlockingEnabled} id="toggleBlocking" checked={isBlockingEnabled} onChange={toggleBlockingState}></input>
-            <div>{timeLeft}</div>
+    {isBlockingEnabled && (
+                <div>
+                    Time Left: {formattedTimeLeft}
+                </div>
+            )}
             <h2>Add or Remove Blocked Websites</h2>
             <input
                 type="text"
