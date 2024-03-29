@@ -1,3 +1,15 @@
+// Set the default extension icon when the background script initializes
+chrome.runtime.onInstalled.addListener(function () {
+  chrome.action.setIcon({
+    path: {
+      16: "images/open-state/16.png",
+      32: "images/open-state/32.png",
+      48: "images/open-state/48.png",
+      128: "images/open-state/128.png",
+    },
+  });
+});
+
 // Define initial state
 let state = {
   isBlockingEnabled: false,
@@ -25,14 +37,37 @@ function updateState(newState) {
 }
 
 // Function to start the timer
-function startTimer(countdown = 1) {
-  chrome.storage.sync.set({ blockingTimestamp: Date.now() });
-  updateState({
-    timerId: setTimeout(() => {
-      updateState({ isBlockingEnabled: false, timerId: null });
-      console.log("Timer off");
-    }, countdown * 60 * 1000),
-  }); // default 1 minute
+function startTimer(countdown) {
+  console.log(countdown);
+  if (countdown) {
+    chrome.storage.sync.set({
+      blockingTimestamp: Date.now(),
+      countdown: countdown,
+    });
+
+    chrome.action.setIcon({
+      path: {
+        16: "images/block-state/16.png",
+        32: "images/block-state/32.png",
+        48: "images/block-state/48.png",
+        128: "images/block-state/128.png",
+      },
+    });
+    updateState({
+      timerId: setTimeout(() => {
+        updateState({ isBlockingEnabled: false, timerId: null, countdown: 0 });
+        console.log("Timer off");
+        chrome.action.setIcon({
+          path: {
+            16: "images/open-state/16.png",
+            32: "images/open-state/32.png",
+            48: "images/open-state/48.png",
+            128: "images/open-state/128.png",
+          },
+        });
+      }, countdown),
+    }); // default 1 minute
+  }
 }
 
 // Function to stop the timer
@@ -73,14 +108,13 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     case "toggleBlock":
       updateState({ isBlockingEnabled: message.isBlock });
       sendResponse({ result: "Block is toggled" });
-      if (message.isBlock) {
-        startTimer();
-      } else {
+      if (!message.isBlock) {
         stopTimer();
       }
       break;
     case "startTimer":
       startTimer(message.countdown);
+
       sendResponse({
         result: `Timer has started for ${message.countdown} minutes`,
       });

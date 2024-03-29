@@ -1,0 +1,13 @@
+.formStyle{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 500px;
+}
+.timeCircle{
+    
+    background-repeat: no-repeat;
+    background-position:top;
+    background-size: contain;
+
+}

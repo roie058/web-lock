@@ -1,28 +1,35 @@
 
 import './App.css'
 import React, { useState } from 'react';
-import Popup from './Popup';
+
+import Timer from './components/Timer';
+import Nav from './components/UI/Nav';
+import ListPage from './components/ListPage';
+import About from './components/About';
 
 const App: React.FC = () => {
-    const [blockedWebsites,setBlockedWebsites]=useState([]) 
-
-     // Retrieve blocked websites from storage (if any)
-        chrome.storage.sync.get("blockedWebsites", function (data) {
-            if (data.blockedWebsites) {
-              setBlockedWebsites(data.blockedWebsites);
-            }
-        });
+    const [page, setPage] = useState<"home" | "list" | "about">("home")
+     
    
+  const curPage = (page)=>{ switch (page) {
+        case 'home':
+           return <Timer  />
+            break;
+        case 'about':
+         return  <About/>
+            break;
+        case "list":
+           return <ListPage/>
+        default:
+            break;
+    } }   
    
     return (
-        <div>
-            <Popup />
-
-            <ol>
-{blockedWebsites.map((site)=><li>{site}</li>)}
-            </ol>
+        <main className='main'>
+            <Nav page={page} setPage={setPage}  />
+            {curPage(page)}
            
-        </div>
+        </main>
     );
 };
 

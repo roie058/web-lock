@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+#root{
+  padding: 0%;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -35,9 +39,18 @@ h1 {
   line-height: 1.1;
 }
 
+main{
+  background-color: #171717;
+width: 320px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 1px solid gainsboro;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
@@ -52,6 +65,67 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+section {
+  min-height: 500px;
+  margin: 0;
+}
+
+nav{
+  border-bottom:1px solid #f9f9f99d;
+  width: 90%;
+margin-bottom: 10%;
+display: flex;
+flex-direction: column;
+padding: 0 5%;
+}
+.navigation{
+  display: flex;
+  justify-content: space-around;
+  margin: 0;
+  margin-bottom: 0.83em;
+  padding: 0;
+  list-style:none;
+}
+.navigation li{
+  border: 1px solid #f9f9f99d ;
+  padding: 3% 6%;
+  cursor: pointer;
+  text-transform: capitalize;
+}
+.navigation li:hover{
+  background-color: #f9f9f9;
+  color: #171717;
+  
+}
+.navActive{
+  background-color: #f9f9f9;
+  color: #171717;
+  
+}
+
+ol{
+  padding-left: 0%;
+  margin-bottom: 20%;
+}
+
+ol li{
+  display: flex;
+  justify-content: space-between;
+  margin: 5%;
+align-items: center;
+}
+ol li p{
+  margin: 0;
+justify-self: flex-start;
+}
+ol li button{
+  height: auto;
+  justify-self: flex-end;
+  padding: 2% 4%;
+
+  
 }
 
 @media (prefers-color-scheme: light) {
