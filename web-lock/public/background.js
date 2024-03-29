@@ -10,6 +10,14 @@ chrome.runtime.onInstalled.addListener(function () {
   });
 });
 
+const motivationVideos = [
+  "https://www.youtube.com/shorts/srYlzVR9jCg",
+  "https://www.youtube.com/shorts/3TAxutVuSCE",
+  "https://www.youtube.com/shorts/dSRAXW2mqvc",
+  "https://www.youtube.com/shorts/MbN_FTCg4rk",
+  "https://www.youtube.com/shorts/kt04TZi72P0",
+];
+
 // Define initial state
 let state = {
   isBlockingEnabled: false,
@@ -82,9 +90,12 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     state.isBlockingEnabled &&
     state.blockedWebsites.some((website) => tab.url.includes(website))
   ) {
-    chrome.tabs.remove(tabId, function () {
-      console.log("Blocked website:", tab.url);
+    chrome.tabs.update(tabId, {
+      url: motivationVideos[Math.floor(Math.random() * 5)],
     });
+    // chrome.tabs.remove(tabId, function () {
+    //   console.log("Blocked website:", tab.url);
+    // });
   }
 });
 
