@@ -31,7 +31,7 @@ body {
   display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+ 
 }
 
 h1 {
@@ -68,7 +68,7 @@ button:focus-visible {
 }
 
 section {
-  min-height: 500px;
+  min-height: 400px;
   margin: 0;
 }
 

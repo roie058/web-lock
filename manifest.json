@@ -3,17 +3,13 @@
     "name": "Web Lock",
     "version": "1.0.0",    
     "description": "An Extension that lock websites for certain time. helps with productivity, and developes healthy habits.",
-    "icons": {
-        "16": "images/16.png",
-        "32": "images/32.png",
-        "48": "images/48.png",
-        "128": "images/128.png"
-    },
+    
     "background": {
         "service_worker":"service-worker.js",
         "type": "module"
     },
     "action": {
+        "default_icon": "images/open-state/weblock-open.svg",
         "default_popup": "index.html"
     },
     "permissions": [

@@ -16,32 +16,32 @@ const Timer = () => {
     const [time,setTime]=useState<number>(0) 
 
     
-         useEffect(()=>{
-              // Load the toggle state from storage
-              chrome.storage.sync.get(['isBlockingEnabled','blockingTimestamp','countdown'], function(data) {
-                  if (data.isBlockingEnabled !== undefined) {
-                      setIsBlockingEnabled(data.isBlockingEnabled);
-                      if (data.isBlockingEnabled) {
-                          // Calculate the remaining time before turning off blocking
-                          const blockingTimestamp = data.blockingTimestamp || 0;
-                          const currentTime = Date.now();
-                          const remainingTime = blockingTimestamp + ( data.countdown) - currentTime; // 2 minutes
+          useEffect(()=>{
+               // Load the toggle state from storage
+               chrome.storage.sync.get(['isBlockingEnabled','blockingTimestamp','countdown'], function(data) {
+                   if (data.isBlockingEnabled !== undefined) {
+                       setIsBlockingEnabled(data.isBlockingEnabled);
+                       if (data.isBlockingEnabled) {
+                           // Calculate the remaining time before turning off blocking
+                           const blockingTimestamp = data.blockingTimestamp || 0;
+                           const currentTime = Date.now();
+                           const remainingTime = blockingTimestamp + ( data.countdown) - currentTime; // 2 minutes
                         
-                          if (remainingTime > 0) {
-                              setTimeLeft(remainingTime);
-                              // Start the countdown timer
-                              const timerId = setInterval(() => {
-                                  setTimeLeft(prevTimeLeft => {
-                                      if (prevTimeLeft <= 1000) {
-                                          clearInterval(timerId);
-                                          setIsBlockingEnabled(false);
-                                          return 0;
-                                      }
-                                      return prevTimeLeft - 1000;
-                                  });
-                              }, 1000);
-                          } else {
-                              // If the time limit has already passed, turn off blocking
+                           if (remainingTime > 0) {
+                               setTimeLeft(remainingTime);
+                               // Start the countdown timer
+                               const timerId = setInterval(() => {
+                                   setTimeLeft(prevTimeLeft => {
+                                       if (prevTimeLeft <= 1000) {
+                                           clearInterval(timerId);
+                                           setIsBlockingEnabled(false);
+                                           return 0;
+                                       }
+                                       return prevTimeLeft - 1000;
+                                   });
+                               }, 1000);
+                           } else {
+                               // If the time limit has already passed, turn off blocking
                              setIsBlockingEnabled(false);
                           
                          }
@@ -55,14 +55,14 @@ const Timer = () => {
         const newIsBlockingEnabled = !isBlockingEnabled;
         setIsBlockingEnabled(newIsBlockingEnabled);
 
-          chrome.runtime.sendMessage({ action: 'toggleBlock', isBlock: newIsBlockingEnabled }, function(response) {
-              console.log(response);
-          });
+           chrome.runtime.sendMessage({ action: 'toggleBlock', isBlock: newIsBlockingEnabled }, function(response) {
+               console.log(response);
+           });
 
          if (newIsBlockingEnabled) {
-              chrome.runtime.sendMessage({ action: 'startTimer',countdown:timer }, function(response) {
-                  console.log(response);
-              });
+               chrome.runtime.sendMessage({ action: 'startTimer',countdown:timer }, function(response) {
+                   console.log(response);
+               });
              setTimeLeft(timer); // Reset the timer
              const timerId = setInterval(() => {
                  setTimeLeft(prevTimeLeft => {
@@ -141,8 +141,8 @@ const Timer = () => {
           }} strokeWidth={3.5}   value={timeLeft} minValue={1}  maxValue={14400000}  /><h1>{formatTime(timeLeft)}</h1></> }
         </div>
 
-    <button disabled={isBlockingEnabled} type="submit" onClick={()=>{if(isBlockingEnabled){return};toggleBlockingState(time);
-    }}>Start</button>
+   {!isBlockingEnabled && <button disabled={isBlockingEnabled} type="submit" onClick={()=>{if(isBlockingEnabled){return};toggleBlockingState(time);
+    }}>Start</button>}
     </form>
     </>
   )
