@@ -90,12 +90,15 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     state.isBlockingEnabled &&
     state.blockedWebsites.some((website) => tab.url.includes(website))
   ) {
-    chrome.tabs.update(tabId, {
-      url: motivationVideos[Math.floor(Math.random() * 5)],
-    });
-    // chrome.tabs.remove(tabId, function () {
-    //   console.log("Blocked website:", tab.url);
-    // });
+    if (state.blockedWebsites.join().includes("youtube.com")) {
+      chrome.tabs.remove(tabId, function () {
+        console.log("Blocked website:", tab.url);
+      });
+    } else {
+      chrome.tabs.update(tabId, {
+        url: motivationVideos[Math.floor(Math.random() * 5)],
+      });
+    }
   }
 });
 

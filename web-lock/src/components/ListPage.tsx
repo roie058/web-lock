@@ -27,7 +27,7 @@ const ListPage = () => {
         const handleRemoveWebsite = (site) => {
             if (site.trim() !== '') {
                 setBlockedWebsites(list=>list.filter((sites)=>(sites !== site)))
-                 chrome.runtime.sendMessage({ action: 'removeBlockedWebsite', website: website }, function(response) {
+                 chrome.runtime.sendMessage({ action: 'removeBlockedWebsite', website: site }, function(response) {
                      console.log(response);
                  });
             }
