@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Web Lock",
     "version": "1.0.0",    
-    "description": "An Extension that lock websites for certain time. helps with productivity, and developes healthy habits.",
+    "description": "An Extension that block selected websites for certain time. helps with productivity, and developes healthy habits.",
     "action": {
         "default_popup": "index.html",
         "default_icon": {              
@@ -24,6 +24,12 @@
     "host_permissions":[
         "http://*/*",
         "https://*/*"
-    ]
+    ],
+    "web_accessible_resources": [
+        {"resources":["block-page.html"],
+        "matches": [ "http://*/*",
+        "https://*/*" ]}
+      ]
+      
 
 }

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motivational Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 750px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .donation-box {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+    
+        .donation-box button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+     <script src="https://www.paypal.com/sdk/js?client-id=AT8fSB58An8UvtTJQOlkgEaGkrS62xt08gU3XrXfEanqmJUuMdNufZNt1Z2zT6swu7l-7xIEtYkQywwm&components=buttons"></script>
+     <script src="https://www.youtube.com/iframe_api"></script>
+     <script src="block-page.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div id="player">
+            <!-- Replace 'your-video-url' with the URL of your motivational video -->
+         
+        </div>
+        <div class="donation-box">
+            <h2>Support Our Cause</h2>
+            <p>If you found this extension helpful, consider making a donation to support our work.</p>
+            <div style="display: flex; align-items: center; margin-bottom: 15px; margin: 15px 15%; justify-content: space-between;">
+                <label for="amount"  >Tip</label>
+                <input value="5" style="width: 300px; height: 30px; margin: 0;" id="amount" type="number" min='1' >
+                
+            </div>
+            
+            <div id="paypal"></div>
+        </div>
+    </div>
+   
+</body>
+</html>
